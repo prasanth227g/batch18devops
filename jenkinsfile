@@ -1,0 +1,33 @@
+node
+    {
+	def mavenHome=tool name:"maven3.6.3"
+	properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '2', daysToKeepStr: '', numToKeepStr: '2')), pipelineTriggers([pollSCM('* * * * *')])])
+	stage('checkout')
+	    {
+	      git branch: 'development', credentialsId: 'e357a2da-2aae-44e4-8cb0-2bc2302a02ce', url: 'https://github.com/prasanth227g/maven-web-application.git'
+	    }
+        stage('build')
+            {
+
+              sh "${mavenHome}/bin/mvn clean package"
+
+            }
+      /*  stage('UploadArtifactsIntoNexus')
+            {
+              sh "${mavenHome}/bin/mvn clean deploy"
+            }
+        stage('DeployAppIntoTomctServer')
+            {
+              sshagent(['f0be7832-4be6-4c54-a85d-dbcdf66073b5']){
+                 sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@35.175.104.95://opt/apache-tomcat-9.0.44/webapps/"
+                }
+            }
+         stage('EmailNotification')
+            {
+              emailext body: '''Build is over!!
+
+              regards,
+              prasanth,
+              8978017430.''', subject: 'build is over!!', to: 'gprasanthkumar227@gmail.com'
+            } */
+    }
